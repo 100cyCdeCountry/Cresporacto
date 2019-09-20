@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Area 51</title>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="area51.css">
+</head>
+<body>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<script>
+    let msg = '<div class="rect">\n' +
+        '<div class="ascii-art fastType">\n' +
+        '    ..%%%%...%%%%%...%%%%%%...%%%%....%%%%...%%..%%..%%..%%..%%%%%%..%%%%%...%%..%%...........%%%%...%%%%%...%%%%%%...%%%%...........%%%%%%....%%...\n' +
+        '    .%%..%%..%%..%%..%%......%%..%%..%%..%%..%%..%%..%%%.%%....%%....%%..%%...%%%%...........%%..%%..%%..%%..%%......%%..%%..........%%.......%%%...\n' +
+        '    .%%......%%..%%..%%%%....%%......%%..%%..%%..%%..%%.%%%....%%....%%%%%.....%%............%%%%%%..%%%%%...%%%%....%%%%%%...........%%%%.....%%...\n' +
+        '    .%%..%%..%%..%%..%%......%%..%%..%%..%%..%%..%%..%%..%%....%%....%%..%%....%%............%%..%%..%%..%%..%%......%%..%%..............%%....%%...\n' +
+        '    ..%%%%...%%%%%...%%%%%%...%%%%....%%%%....%%%%...%%..%%....%%....%%..%%....%%............%%..%%..%%..%%..%%%%%%..%%..%%..........%%%%%...%%%%%%.\n' +
+        '</div>' +
+        '    <p class="fastType">Introduzca Contraseña</p>\n' +
+        '    <input id="pass" class="controls rect" type="password" style="display: none;"/>\n' +
+        '    <button class="controls rect" style="display: none;" onclick="onPass()">Entrar</button>\n' +
+        '</div>';
+
+    function typingFx(selector, typeInterval, callback) {
+
+        if( typeInterval === undefined )
+            typeInterval = 100;
+
+        let nodes = Array.from(document.querySelectorAll(selector));
+        let texts = nodes.map((n) => n.innerHTML);
+
+        for(let node of nodes)
+            node.innerHTML = "";
+
+        typingPipe = function(texts, nodes) {
+
+            if(nodes.length == 0) {
+                if(callback !== undefined)
+                    callback();
+                return;
+            }
+
+            let node = nodes[0];
+            let text = texts[0];
+
+            if(node.innerHTML.length == text.length) {
+                texts.shift();
+                nodes.shift();
+            }else{
+                node.innerHTML += text.charAt(node.innerHTML.length);
+            }
+
+            setTimeout(function() {typingPipe(texts, nodes)}, typeInterval);
+
+        };
+
+        setTimeout(function() {typingPipe(texts, nodes)}, typeInterval);
+
+    }
+
+    function remove() {
+        document.body.innerHTML = "";
+    }
+
+    function write(msg) {
+        document.body.innerHTML = msg;
+    }
+
+    function show(selector, timeout) {
+        setTimeout(function() {document.querySelectorAll(selector).forEach(e => e.style.display = "block")}, timeout);
+    }
+
+    write(msg)
+    typingFx(".fastType", 10, function() { show(".controls", 100)} );
+
+    function onPass() {
+
+        let pass = document.getElementById("pass").value;
+
+        let secrets = [
+            "U2FsdGVkX18/Uenwgn6sC392Ez9Dz5T/F9MKiECF7AaE8SaT2EjmA5M/N3rWmCqk3D0htztLC9OFXi3mGyk/Jw==",
+            "U2FsdGVkX1+IJ7AK5uAsFtUmwsLAqL4HmrmqQhAKGSBPit4AEFnwTDUYYyoGJBulbts6QI3NZLdoK5jl5XkA+Q==",
+            "U2FsdGVkX1/b4Y4e/z35AVSQcBOjordzIbEOSgG8fbRHuhVQfygq35bEV5S5KyfJiloYMRtB/HokjNjty5HL/g==",
+            "U2FsdGVkX1/nRxD1XUUP6fYOtmcna8k/3dwKHW0d1sVbf8UflXTwuuENruAVhZzdXav1pOzn9JR/QUcnTfYY6w==",
+            "U2FsdGVkX18qjIrL7HyR9jzT5cY5a61YR9LBYlxaDnjYhd+N8NXgj1pNPLwnp+CKHlL8f5mHc6j382EeYZSODA==",
+            "U2FsdGVkX1+5QuD/obXH6eTQl+QkGh+WvKzKizVUjq2Mcll77Cja46eimnxBJTO8i01JgC99JZ/aAX5GZMl+ZQ=="
+        ];
+
+        for(let secret of secrets) {
+            let decryptedBytes = CryptoJS.AES.decrypt(secret, pass);
+            try {
+                let plaintext = decryptedBytes.toString(CryptoJS.enc.Utf8);
+                if (plaintext != "") {
+                    document.location = plaintext;
+                    return;
+                }
+            }catch (e) { }
+
+        }
+
+        alert("Incorrect Password");
+
+    }
+
+</script>
+</html>

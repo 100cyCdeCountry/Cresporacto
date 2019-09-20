@@ -1,0 +1,43 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: black;
+    color: greenyellow;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.rect{
+    border-style: double;
+    border-color: greenyellow;
+    border-width: 4px;
+    padding: 2em;
+    margin: 1em;
+}
+
+.rect  button{
+    padding: 1em;
+    margin: .5em;
+    color: greenyellow;
+    background: #23370e;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.rect  button:hover{
+    background: #4a5f0f;
+}
+
+
+.rect input{
+    padding: .5em 1em .5em 1em;
+    margin: .5em;
+    color: greenyellow;
+    background: #23370e;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.ascii-art {
+    font-family: monospace;
+    white-space: pre;
+}
